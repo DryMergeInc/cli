@@ -1,0 +1,52 @@
+name: Download and Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Release version'
+        required: true
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Download artifacts from private repo
+        env:
+          TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+        run: |
+          # Replace OWNER, REPO, and WORKFLOW_ID with actual values
+          OWNER="DryMergeInc"
+          REPO="graphapi"
+          WORKFLOW_ID="your_workflow_id_here"
+          VERSION="${{ github.event.inputs.version }}"
+          
+          # Fetch the latest workflow run artifacts
+          ARTIFACTS=$(curl -s -H "Authorization: token $TOKEN" \
+            "https://api.github.com/repos/$OWNER/$REPO/actions/workflows/$WORKFLOW_ID/runs?status=completed&per_page=1" | \
+            jq -r '.workflow_runs[0].artifacts_url')
+
+          # Download each artifact
+          curl -s -H "Authorization: token $TOKEN" "$ARTIFACTS" | \
+          jq -r '.artifacts[] | .archive_download_url' | \
+          while read -r URL; do
+            curl -L -o "artifact.zip" -H "Authorization: token $TOKEN" "$URL"
+            unzip artifact.zip -d ./artifacts/
+          done
+
+      - name: Create Release and Upload Binaries
+        id: create_release
+        uses: gh-actions/gh-release@master
+        with:
+          tag_name: ${{ github.event.inputs.version }}
+          release_name: Release ${{ github.event.inputs.version }}
+          body: Description of the release
+          draft: false
+          prerelease: false
+          files: ./artifacts/*
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
