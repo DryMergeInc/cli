@@ -42,3 +42,5 @@ chmod +x $EXECUTABLE_NAME/drycli
 sudo mv $EXECUTABLE_NAME/drycli /usr/local/bin/dry
 
 echo "$EXECUTABLE_NAME installed successfully."
+rm $DOWNLOAD_FILE
+rm $EXECUTABLE_NAME
