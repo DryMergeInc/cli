@@ -33,6 +33,7 @@ if [ "$OS" == "Darwin" ]; then
   unzip $DOWNLOAD_FILE -d $EXECUTABLE_NAME
 elif [ "$OS" == "Linux" ]; then
   tar -xzf $DOWNLOAD_FILE -C $EXECUTABLE_NAME
+  mv drycli drycli_exec
 fi
 
 # Make it executable
