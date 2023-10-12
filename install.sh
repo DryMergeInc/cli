@@ -32,8 +32,8 @@ echo "Unzipping downloaded file..."
 if [ "$OS" == "Darwin" ]; then
   unzip $DOWNLOAD_FILE -d $EXECUTABLE_NAME
 elif [ "$OS" == "Linux" ]; then
-  tar -xzf $DOWNLOAD_FILE -C $EXECUTABLE_NAME
-  mv drycli drycli_exec
+  tar -xzf $DOWNLOAD_FILE
+  mv drycli $EXECUTABLE_NAME
 fi
 
 # Make it executable
