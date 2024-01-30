@@ -37,11 +37,10 @@ elif [ "$OS" == "Linux" ]; then
 fi
 
 # Make it executable
-chmod +x $EXECUTABLE_NAME/drycli
+chmod +x $EXECUTABLE_NAME
 
 # Move it to /usr/local/bin or any other directory in $PATH
-sudo mv $EXECUTABLE_NAME/drycli /usr/local/bin/dry
+sudo mv $EXECUTABLE_NAME /usr/local/bin/dry
 
 echo "$EXECUTABLE_NAME installed successfully."
 rm $DOWNLOAD_FILE
-rm -r $EXECUTABLE_NAME
